@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vector Calculator - Web Version</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .left-panel {
+            flex: 1;
+            min-width: 400px;
+            padding: 20px;
+            border-right: 2px solid #e0e0e0;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            flex: 1;
+            min-width: 500px;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        .section {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .setup-section {
+            background: #e8f4f8;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .setup-section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .setup-section input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .setup-section button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .setup-section button:hover {
+            background: #5568d3;
+        }
+
+        .vector-section {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .vector-section h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #764ba2;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .input-row > div {
+            flex: 1;
+        }
+
+        .help-text {
+            font-size: 11px;
+            color: #888;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .limits-section {
+            background: #fff9e6;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 2px solid #ffd700;
+        }
+
+        .run-button {
+            width: 100%;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .run-button:hover {
+            background: #45a049;
+        }
+
+        .run-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .results-text {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .clear-button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .clear-button:hover {
+            background: #da190b;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .chart-container canvas {
+            max-height: 400px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            padding: 20px;
+        }
+
+        .error {
+            color: #f44336;
+            font-weight: bold;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .left-panel {
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Vector Calculator - Web Version</h1>
+            <p>Generate and combine multiple vectors with normal distribution</p>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="setup-section">
+                    <h2>Setup</h2>
+                    <label for="numVectors">Number of Vectors (1-20):</label>
+                    <input type="number" id="numVectors" min="1" max="20" value="2">
+                    <label for="vectorSize">Vector Size:</label>
+                    <input type="number" id="vectorSize" value="1000000" readonly style="background: #f0f0f0;">
+                    <button onclick="setupVectors()">Setup Vectors</button>
+                </div>
+
+                <div id="vectorsContainer"></div>
+
+                <div id="limitsSection" style="display: none;">
+                    <div class="limits-section">
+                        <h2>Result Vector Limits (Optional)</h2>
+                        <div class="input-group">
+                            <label for="desiredLower">Desired Lower Limit:</label>
+                            <input type="number" id="desiredLower" step="any">
+                        </div>
+                        <div class="input-group">
+                            <label for="desiredUpper">Desired Upper Limit:</label>
+                            <input type="number" id="desiredUpper" step="any">
+                        </div>
+                        <div class="help-text">Enter desired limits to count elements outside the range in the result vector</div>
+                    </div>
+
+                    <button class="run-button" onclick="runCalculation()">RUN CALCULATION</button>
+                    <div class="help-text" style="text-align: center;">Click RUN to combine all vectors and calculate statistics</div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="results-container">
+                    <h2>Results</h2>
+                    <div id="resultsText" class="results-text">Results will appear here after running the calculation...</div>
+                    <button class="clear-button" onclick="clearResults()">Clear Results</button>
+                </div>
+
+                <div class="chart-container" id="chartContainer" style="display: none;">
+                    <h2>Distribution Plot</h2>
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let vectorData = {};
+        let numVectors = 0;
+        let vectorSize = 1000000;
+        let chartInstance = null;
+
+        function setupVectors() {
+            const numVectorsInput = document.getElementById('numVectors').value;
+            numVectors = parseInt(numVectorsInput);
+
+            if (numVectors < 1 || numVectors > 20) {
+                alert('Please enter a number between 1 and 20');
+                return;
+            }
+
+            vectorSize = parseInt(document.getElementById('vectorSize').value);
+
+            const container = document.getElementById('vectorsContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= numVectors; i++) {
+                const vectorDiv = document.createElement('div');
+                vectorDiv.className = 'vector-section';
+                vectorDiv.innerHTML = `
+                    <h3>Vector ${i}</h3>
+                    <div class="input-group">
+                        <label>Size: <strong>${vectorSize.toLocaleString()}</strong></label>
+                    </div>
+                    <div class="input-group">
+                        <label for="sign${i}">Sign:</label>
+                        <select id="sign${i}">
+                            <option value="+">+</option>
+                            <option value="-">-</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="mean${i}">Mean:</label>
+                        <input type="number" id="mean${i}" step="any" placeholder="e.g., 0">
+                    </div>
+                    <div class="input-row">
+                        <div>
+                            <label for="lower${i}">Lower Limit:</label>
+                            <input type="number" id="lower${i}" step="any" placeholder="e.g., -10">
+                        </div>
+                        <div>
+                            <label for="upper${i}">Upper Limit:</label>
+                            <input type="number" id="upper${i}" step="any" placeholder="e.g., 10">
+                        </div>
+                    </div>
+                    <div class="help-text">99.9997% of generated numbers will fall within the lower and upper limits</div>
+                `;
+                container.appendChild(vectorDiv);
+            }
+
+            document.getElementById('limitsSection').style.display = 'block';
+            appendResult('✓ Setup complete! Enter parameters for each vector and click RUN.\n');
+        }
+
+        function normalRandom(mean, stdDev) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return mean + stdDev * Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        }
+
+        function generateVector(vectorNum) {
+            const sign = document.getElementById(`sign${vectorNum}`).value;
+            const mean = parseFloat(document.getElementById(`mean${vectorNum}`).value);
+            const lower = parseFloat(document.getElementById(`lower${vectorNum}`).value);
+            const upper = parseFloat(document.getElementById(`upper${vectorNum}`).value);
+
+            if (isNaN(mean) || isNaN(lower) || isNaN(upper)) {
+                throw new Error(`Vector ${vectorNum}: Please enter valid numbers for all fields`);
+            }
+
+            if (lower >= upper) {
+                throw new Error(`Vector ${vectorNum}: Lower limit must be less than upper limit`);
+            }
+
+            const k = 4.5;
+            const distToUpper = upper - mean;
+            const distToLower = mean - lower;
+            const maxDistance = Math.max(distToUpper, distToLower);
+            const std = maxDistance / k;
+
+            if (std <= 0) {
+                throw new Error(`Vector ${vectorNum}: Cannot calculate valid standard deviation`);
+            }
+
+            const vector = new Float64Array(vectorSize);
+            for (let i = 0; i < vectorSize; i++) {
+                vector[i] = normalRandom(mean, std);
+            }
+
+            const actualMin = Math.min(...vector);
+            const actualMax = Math.max(...vector);
+            const actualMean = vector.reduce((a, b) => a + b, 0) / vectorSize;
+            const actualStd = Math.sqrt(vector.reduce((a, b) => a + Math.pow(b - actualMean, 2), 0) / vectorSize);
+
+            let inRange = 0;
+            for (let i = 0; i < vectorSize; i++) {
+                if (vector[i] >= lower && vector[i] <= upper) {
+                    inRange++;
+                }
+            }
+            const percentageInRange = (inRange / vectorSize) * 100;
+
+            appendResult('='.repeat(50));
+            appendResult(`✓ Vector ${vectorNum} Generated Successfully!`);
+            appendResult('='.repeat(50));
+            appendResult(`Distribution: Normal (Gaussian)`);
+            appendResult(`Size: ${vectorSize.toLocaleString()}`);
+            appendResult(``);
+            appendResult(`Target Parameters:`);
+            appendResult(`  Mean:        ${mean}`);
+            appendResult(`  Lower Limit: ${lower}`);
+            appendResult(`  Upper Limit: ${upper}`);
+            appendResult(`  Calculated σ: ${std.toFixed(6)}`);
+            appendResult(``);
+            appendResult(`Actual Statistics:`);
+            appendResult(`  Actual Mean: ${actualMean.toFixed(6)}`);
+            appendResult(`  Actual Std:  ${actualStd.toFixed(6)}`);
+            appendResult(`  Actual Min:  ${actualMin.toFixed(6)}`);
+            appendResult(`  Actual Max:  ${actualMax.toFixed(6)}`);
+            appendResult(`  In Range:    ${inRange.toLocaleString()}/${vectorSize.toLocaleString()} (${percentageInRange.toFixed(2)}%)`);
+            appendResult(``);
+            appendResult(`First 10 values: [${Array.from(vector.slice(0, 10)).map(v => v.toFixed(4)).join(', ')}]`);
+            appendResult(`Last 10 values: [${Array.from(vector.slice(-10)).map(v => v.toFixed(4)).join(', ')}]`);
+            appendResult(``);
+
+            return { vector, sign };
+        }
+
+        function runCalculation() {
+            clearResults();
+            vectorData = {};
+
+            appendResult('Generating vectors...\n');
+
+            try {
+                for (let i = 1; i <= numVectors; i++) {
+                    vectorData[i] = generateVector(i);
+                }
+
+                const result = new Float64Array(vectorSize);
+                const operationDetails = [];
+
+                for (let i = 1; i <= numVectors; i++) {
+                    const { vector, sign } = vectorData[i];
+                    if (sign === '+') {
+                        for (let j = 0; j < vectorSize; j++) {
+                            result[j] += vector[j];
+                        }
+                        operationDetails.push(`+ Vector ${i}`);
+                    } else {
+                        for (let j = 0; j < vectorSize; j++) {
+                            result[j] -= vector[j];
+                        }
+                        operationDetails.push(`- Vector ${i}`);
+                    }
+                }
+
+                const mean = result.reduce((a, b) => a + b, 0) / vectorSize;
+                const std = Math.sqrt(result.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / vectorSize);
+                const sortedResult = Array.from(result).sort((a, b) => a - b);
+                const median = sortedResult[Math.floor(vectorSize / 2)];
+                const minVal = sortedResult[0];
+                const maxVal = sortedResult[vectorSize - 1];
+
+                appendResult('='.repeat(60));
+                appendResult('CALCULATION RESULTS');
+                appendResult('='.repeat(60));
+                appendResult(``);
+                appendResult(`Operation: ${operationDetails.join(' ')}`);
+                appendResult(`Result Vector Size: ${vectorSize.toLocaleString()}`);
+                appendResult(``);
+                appendResult('='.repeat(60));
+                appendResult('STATISTICS');
+                appendResult('='.repeat(60));
+                appendResult(``);
+                appendResult(`Mean (μ):              ${mean.toFixed(6)}`);
+                appendResult(`Standard Deviation (σ): ${std.toFixed(6)}`);
+                appendResult(`Median:                ${median.toFixed(6)}`);
+                appendResult(`Minimum:               ${minVal.toFixed(6)}`);
+                appendResult(`Maximum:               ${maxVal.toFixed(6)}`);
+                appendResult(``);
+                appendResult('='.repeat(60));
+                appendResult('CONFIDENCE INTERVALS (Based on Standard Deviations)');
+                appendResult('='.repeat(60));
+                appendResult(``);
+
+                const sigmaRanges = [
+                    [1, '68.27%'],
+                    [2, '95.45%'],
+                    [3, '99.73%'],
+                    [4, '99.9937%'],
+                    [5, '99.999943%'],
+                    [6, '99.9999998%']
+                ];
+
+                for (const [sigma, percentage] of sigmaRanges) {
+                    const lowerLimit = mean - (sigma * std);
+                    const upperLimit = mean + (sigma * std);
+
+                    let inRange = 0;
+                    for (let i = 0; i < vectorSize; i++) {
+                        if (result[i] >= lowerLimit && result[i] <= upperLimit) {
+                            inRange++;
+                        }
+                    }
+                    const actualPercentage = (inRange / vectorSize) * 100;
+
+                    appendResult(`±${sigma}σ Range (${percentage} theoretical):`);
+                    appendResult(`  Lower Limit: ${lowerLimit.toFixed(6)}`);
+                    appendResult(`  Upper Limit: ${upperLimit.toFixed(6)}`);
+                    appendResult(`  Actual Coverage: ${inRange.toLocaleString()}/${vectorSize.toLocaleString()} (${actualPercentage.toFixed(4)}%)`);
+                    appendResult(``);
+                }
+
+                const desiredLower = parseFloat(document.getElementById('desiredLower').value);
+                const desiredUpper = parseFloat(document.getElementById('desiredUpper').value);
+
+                if (!isNaN(desiredLower) && !isNaN(desiredUpper)) {
+                    if (desiredLower >= desiredUpper) {
+                        appendResult(`\n⚠️  Warning: Desired lower limit must be less than upper limit`);
+                    } else {
+                        let belowLower = 0;
+                        let aboveUpper = 0;
+                        let inRange = 0;
+
+                        for (let i = 0; i < vectorSize; i++) {
+                            if (result[i] < desiredLower) {
+                                belowLower++;
+                            } else if (result[i] > desiredUpper) {
+                                aboveUpper++;
+                            } else {
+                                inRange++;
+                            }
+                        }
+
+                        appendResult('='.repeat(60));
+                        appendResult('DESIRED LIMITS ANALYSIS');
+                        appendResult('='.repeat(60));
+                        appendResult(``);
+                        appendResult(`Desired Lower Limit: ${desiredLower.toFixed(6)}`);
+                        appendResult(`Desired Upper Limit: ${desiredUpper.toFixed(6)}`);
+                        appendResult(``);
+                        appendResult(`Elements below lower limit: ${belowLower.toLocaleString()} (${(belowLower / vectorSize * 100).toFixed(4)}%)`);
+                        appendResult(`Elements above upper limit: ${aboveUpper.toLocaleString()} (${(aboveUpper / vectorSize * 100).toFixed(4)}%)`);
+                        appendResult(`Elements within range:      ${inRange.toLocaleString()} (${(inRange / vectorSize * 100).toFixed(4)}%)`);
+                        appendResult(``);
+                    }
+                }
+
+                appendResult('='.repeat(60));
+                appendResult('SAMPLE VALUES');
+                appendResult('='.repeat(60));
+                appendResult(`First 10 values: [${Array.from(result.slice(0, 10)).map(v => v.toFixed(4)).join(', ')}]`);
+                appendResult(`Last 10 values: [${Array.from(result.slice(-10)).map(v => v.toFixed(4)).join(', ')}]`);
+                appendResult(``);
+
+                plotDistribution(result, mean, std);
+
+            } catch (error) {
+                appendResult(`\n❌ ERROR: ${error.message}\n`);
+            }
+        }
+
+        function plotDistribution(data, mean, std) {
+            const chartContainer = document.getElementById('chartContainer');
+            chartContainer.style.display = 'block';
+
+            const bins = 100;
+            const minVal = Math.min(...data);
+            const maxVal = Math.max(...data);
+            const binWidth = (maxVal - minVal) / bins;
+
+            const histogram = new Array(bins).fill(0);
+            for (let i = 0; i < data.length; i++) {
+                const binIndex = Math.min(Math.floor((data[i] - minVal) / binWidth), bins - 1);
+                histogram[binIndex]++;
+            }
+
+            const labels = [];
+            for (let i = 0; i < bins; i++) {
+                labels.push((minVal + i * binWidth).toFixed(2));
+            }
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frequency',
+                        data: histogram,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Distribution of Result Vector (Mean: ${mean.toFixed(4)}, σ: ${std.toFixed(4)})`,
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Value Range',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                autoSkip: true,
+                                maxTicksLimit: 20
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Frequency',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            appendResult(`\n✓ Distribution plot generated and displayed below results`);
+        }
+
+        function appendResult(text) {
+            const resultsDiv = document.getElementById('resultsText');
+            resultsDiv.textContent += text + '\n';
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function clearResults() {
+            document.getElementById('resultsText').textContent = '';
+            if (chartInstance) {
+                chartInstance.destroy();
+                chartInstance = null;
+            }
+            document.getElementById('chartContainer').style.display = 'none';
+        }
+
+        window.onload = function() {
+            console.log('Vector Calculator loaded successfully');
+        };
+    </script>
+</body>
+</html>
