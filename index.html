@@ -289,7 +289,7 @@
                     <label for="numVectors">Number of Vectors (1-20):</label>
                     <input type="number" id="numVectors" min="1" max="20" value="2">
                     <label for="vectorSize">Vector Size:</label>
-                    <input type="number" id="vectorSize" value="1000000" readonly style="background: #f0f0f0;">
+                    <input type="number" id="vectorSize" value="100000" readonly style="background: #f0f0f0;">
                     <button onclick="setupVectors()">Setup Vectors</button>
                 </div>
 
@@ -333,7 +333,7 @@
     <script>
         let vectorData = {};
         let numVectors = 0;
-        let vectorSize = 1000000;
+        let vectorSize = 100000;
         let chartInstance = null;
 
         function setupVectors() {
